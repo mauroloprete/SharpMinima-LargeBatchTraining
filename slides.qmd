@@ -71,7 +71,7 @@ Con una estrategía de $SB$ estamos considerando $|B_{k}| << M$ donde valores co
 De forma gráfica, un punto brusco (**sharp**) es aquel que tiene una curvatura pronunciada en una dirección, mientras que un punto llano (**flat**) es aquel que tiene una curvatura suave en todas las direcciones.
 
 <p align="center">
-  <img src="/img/sharp.png" alt="Descripción de la imagen">
+  <img src="https://raw.githubusercontent.com/mauroloprete/SharpMinima-LargeBatchTraining/main/img/sharp.png" alt="Descripción de la imagen">
 </p>
 
 
@@ -173,16 +173,16 @@ En $\alpha = 0$ tenemos el mínimo de $LB$ y en $\alpha = 1$ tenemos el mínimo 
 
 ## Representación paramétrica en una dimensión (cont.)
 
-![](/img/f1f2.png)
+![](https://raw.githubusercontent.com/mauroloprete/SharpMinima-LargeBatchTraining/main/img/f1f2.png)
 
 ## Representación paramétrica en una dimensión (cont.)
 
-![](/img/c1c2.png)
+![](https://raw.githubusercontent.com/mauroloprete/SharpMinima-LargeBatchTraining/main/img/c1c2.png)
 
 
 ## Representación paramétrica en una dimensión (cont.)
 
-![](/img/c3c4.png)
+![](https://raw.githubusercontent.com/mauroloprete/SharpMinima-LargeBatchTraining/main/img/c3c4.png)
 
 ## Representación paramétrica en una dimensión (cont.)
 
@@ -233,7 +233,7 @@ Esta métrica se relaciona con el valor propio mas gránde  de la matriz Hessian
 ## Sharpness de los mínimos (cont.)
 
 <p align="center">
-  <img src="/img/sharpness.png" alt="Descripción de la imagen">
+  <img src="https://raw.githubusercontent.com/mauroloprete/SharpMinima-LargeBatchTraining/main/img/sharpness.png" alt="Descripción de la imagen">
 </p>
 
 ## SB >> LB
@@ -256,7 +256,7 @@ Esta métrica se relaciona con el valor propio mas gránde  de la matriz Hessian
 Para mostrar como LB escapa de los mínimos se entreno una red en 100 iteraciones con un tamaño de lote de 256 (SB) y el resultado se utilizo como punto de partida para una estrategia LB.
 
 <p align="center">
-  <img src="/img/piggy.png" alt="Descripción de la imagen">
+  <img src="https://raw.githubusercontent.com/mauroloprete/SharpMinima-LargeBatchTraining/main/img/piggy.png" alt="Descripción de la imagen">
 </p>
 
 ## Preguntas abiertas
