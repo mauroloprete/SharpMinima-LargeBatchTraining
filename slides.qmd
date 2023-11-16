@@ -2,7 +2,10 @@
 title: "On large-batch training for deep learning: Generalization GAP and Sharp Minima"
 format:
   revealjs: 
-    theme: dark
+    theme: 
+     - dark
+     - custom.scss
+    
 ---
 
 ## Introducción
@@ -162,13 +165,13 @@ tabla_gt
 
 ## Representación paramétrica en una dimensión
 
-Si tomamos $x_{s}^{*}$ y $x_{l}^{*}$ como los mínimos de $f$ para $SB$ y $LB$ respectivamente podemos gráficar en un segmento que contegna a ambos puntos:
+Si tomamos $x_{s}^{*}$ y $x_{l}^{*}$ como los mínimos de $f$ para $SB$ y $LB$ respectivamente podemos gráficar en un segmento que contenga a ambos puntos:
 
 $$f(\alpha x_{s}^{*} + (1 - \alpha)x_{l}^{*})$$
 
 Con $\alpha \in [-1, 2]$.
 
-En $\alpha = 0$ tenemos el mínimo de $LB$ y en $\alpha = 1$ tenemos el mínimo de $SB$.
+En $\alpha = 0$ tenemos el mínimo de $LB$ y en $\alpha = 1$ el mínimo de $SB$.
 
 
 ## Representación paramétrica en una dimensión (cont.)
@@ -233,7 +236,7 @@ Esta métrica se relaciona con el valor propio mas gránde  de la matriz Hessian
 ## Sharpness de los mínimos (cont.)
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/mauroloprete/SharpMinima-LargeBatchTraining/main/img/sharpness.png" alt="Descripción de la imagen">
+  <img src="https://raw.githubusercontent.com/mauroloprete/SharpMinima-LargeBatchTraining/main/img/sharpness.png" alt="Descripción de la imagen" class="imagen-escalada">
 </p>
 
 ## SB >> LB
