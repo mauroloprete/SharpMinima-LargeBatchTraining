@@ -1,11 +1,12 @@
 ---
 title: "On large-batch training for deep learning: Generalization GAP and Sharp Minima"
+bibliography: references.bib
 format:
   revealjs: 
     theme: 
      - dark
-     - custom.scss
-    
+nocite: |
+  @*
 ---
 
 ## Introducción
@@ -13,7 +14,7 @@ format:
 En el proceso de entrenamiento de un modelo de aprendizaje nos enfrentamos al siguiente problema:
 
 
-$\min_{x} ~ f(x) := \frac{1}{M} \sum_{i = 1}^{M}{f_{i}(x)}$$
+$$\min_{x} ~ f(x) := \frac{1}{M} \sum_{i = 1}^{M}{f_{i}(x)}$$
 
 Donde $f_{i}$ refiere a la función de perdida de la obseración i-ésima con $i \in {1, 2, \cdots, M}$.
 
@@ -77,6 +78,27 @@ De forma gráfica, un punto brusco (**sharp**) es aquel que tiene una curvatura 
   <img src="https://raw.githubusercontent.com/mauroloprete/SharpMinima-LargeBatchTraining/main/img/sharp.png" alt="Descripción de la imagen">
 </p>
 
+## Algoritmo ADAM
+
+```plaintext
+Inicializar θ₀, m₀, v₀ como 0
+t ← 0
+Mientras no se haya alcanzado el número máximo de iteraciones:
+    Obtener el conjunto de datos de entrenamiento X y sus etiquetas Y
+    Calcular el gradiente promedio:
+    gₜ = (1/|Bk|) ∑ᵢ ∇_θ 𝓛(θ_{t-1}, xᵢ, yᵢ)
+    Incrementar t: t ← t + 1
+    Actualizar los momentos:
+    mₜ = β₁ ⋅ m_{t-1} + (1 - β₁) ⋅ gₜ
+    vₜ = β₂ ⋅ v_{t-1} + (1 - β₂) ⋅ (gₜ ⊙ gₜ)
+    Corregir los momentos sesgados:
+    m̂ₜ = mₜ / (1 - β₁ᵗ)
+    v̂ₜ = vₜ / (1 - β₂ᵗ)
+    Actualizar los parámetros:
+    θₜ = θ_{t-1} - α ⋅ m̂ₜ / (√(v̂ₜ) + ε)
+```
+
+Donde $\epsilon = 0.001$ y $\beta_{1} = 0.9$ ; $\beta_{2} = 0.99$
 
 ## Experimentos
 
@@ -140,8 +162,8 @@ colnames(data) <- c("Name", "Training_SB_1", "Training_LB_2", "Test_SB_3", "Test
 tabla_gt <- data %>%
   gt() %>%
   tab_header(
-    title = "Tabla de Precisión",
-    subtitle = "Precisión de Entrenamiento (SB) y Pruebas (LB)"
+    title = "Precisión",
+    subtitle = "Precisión de Entrenamiento (SB) y Test (LB)"
   ) %>%
   cols_label(
     Training_SB_1 = "Training (SB)",
@@ -243,7 +265,9 @@ Esta métrica se relaciona con el valor propio mas gránde  de la matriz Hessian
 
 - **Comportamiento de SB (Small Batch) con gradientes ruidosos:**
   - Los gradientes ruidosos en métodos SB afectan el movimiento de las iteraciones.
+  . . .
   - El ruido en el gradiente aleja las iteraciones de los minimizadores afilados.
+  . . .
   - Promueve el movimiento hacia minimizadores más planos para evitar la influencia del ruido.
   
 
@@ -252,7 +276,9 @@ Esta métrica se relaciona con el valor propio mas gránde  de la matriz Hessian
 - **Impacto del tamaño del lote:**
   - Cuando el tamaño del lote excede un umbral específico:
     - El ruido en el gradiente estocástico no es suficiente para salir de la cuenca inicial.
+    . . .
     - Conduce a la convergencia hacia un tipo de minimizador más afilado.
+  
 
 ## LB escapando del mínimo puntiagudo
 
@@ -265,14 +291,23 @@ Para mostrar como LB escapa de los mínimos se entreno una red en 100 iteracione
 ## Preguntas abiertas
 
 - ¿Los métodos de gran lote siempre convergen hacia minimizadores afilados en el aprendizaje profundo?
+. . .
 - ¿Se pueden diseñar redes que funcionen mejor con métodos de gran lote?
 - ¿Hay una manera de comenzar las redes para que los métodos de gran lote funcionen mejor?
+. . .
 - ¿Podemos encontrar formas de evitar que los métodos de gran lote se enfoquen en minimizadores afilados?
 
 ## Conclusiones
 
 - La convergencia hacia minimizadores afilados afecta la capacidad de generalización en métodos de gran lote para el aprendizaje profundo.
+. . .
 - Estrategias previas como la ampliación de datos y el entrenamiento conservador no resuelven completamente el problema de generalización deficiente en métodos de gran lote.
+. . .
 - El muestreo dinámico muestra cierta promesa para mejorar los resultados de estos métodos.
+. . .
 - La similitud en los valores de pérdida entre minimizadores afilados y planos es consistente con estudios previos.
 
+## Referencias
+
+::: {#refs}
+:::

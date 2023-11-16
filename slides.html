@@ -93,7 +93,26 @@
     code span.va { color: #00e0e0; } /* Variable */
     code span.vs { color: #abe338; } /* VerbatimString */
     code span.wa { color: #dcc6e0; } /* Warning */
-  </style>
+    /* CSS for citations */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+    }
+    .hanging-indent div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }  </style>
   <link rel="stylesheet" href="slides_files/libs/revealjs/dist/theme/quarto.css">
   <link href="slides_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="slides_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
@@ -398,7 +417,7 @@
 <section id="introducción" class="slide level2">
 <h2>Introducción</h2>
 <p>En el proceso de entrenamiento de un modelo de aprendizaje nos enfrentamos al siguiente problema:</p>
-<p><span class="math inline">\(\min_{x} ~ f(x) := \frac{1}{M} \sum_{i = 1}^{M}{f_{i}(x)}\)</span>$</p>
+<p><span class="math display">\[\min_{x} ~ f(x) := \frac{1}{M} \sum_{i = 1}^{M}{f_{i}(x)}\]</span></p>
 <p>Donde <span class="math inline">\(f_{i}\)</span> refiere a la función de perdida de la obseración i-ésima con <span class="math inline">\(i \in {1, 2, \cdots, M}\)</span>.</p>
 <p>Como toda función de perdida, <span class="math inline">\(f_{i}\)</span> captura la desviación de la predicción del modelo sobre los datos de entrenamiento.</p>
 </section>
@@ -455,31 +474,50 @@
 <img src="https://raw.githubusercontent.com/mauroloprete/SharpMinima-LargeBatchTraining/main/img/sharp.png" alt="Descripción de la imagen">
 </p>
 </section>
+<section id="algoritmo-adam" class="slide level2">
+<h2>Algoritmo ADAM</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode numberSource plaintext number-lines code-with-copy"><code class="sourceCode"><span id="cb1-1"><a href="#cb1-1"></a>Inicializar θ₀, m₀, v₀ como 0</span>
+<span id="cb1-2"><a href="#cb1-2"></a>t ← 0</span>
+<span id="cb1-3"><a href="#cb1-3"></a>Mientras no se haya alcanzado el número máximo de iteraciones:</span>
+<span id="cb1-4"><a href="#cb1-4"></a>    Obtener el conjunto de datos de entrenamiento X y sus etiquetas Y</span>
+<span id="cb1-5"><a href="#cb1-5"></a>    Calcular el gradiente promedio:</span>
+<span id="cb1-6"><a href="#cb1-6"></a>    gₜ = (1/|Bk|) ∑ᵢ ∇_θ 𝓛(θ_{t-1}, xᵢ, yᵢ)</span>
+<span id="cb1-7"><a href="#cb1-7"></a>    Incrementar t: t ← t + 1</span>
+<span id="cb1-8"><a href="#cb1-8"></a>    Actualizar los momentos:</span>
+<span id="cb1-9"><a href="#cb1-9"></a>    mₜ = β₁ ⋅ m_{t-1} + (1 - β₁) ⋅ gₜ</span>
+<span id="cb1-10"><a href="#cb1-10"></a>    vₜ = β₂ ⋅ v_{t-1} + (1 - β₂) ⋅ (gₜ ⊙ gₜ)</span>
+<span id="cb1-11"><a href="#cb1-11"></a>    Corregir los momentos sesgados:</span>
+<span id="cb1-12"><a href="#cb1-12"></a>    m̂ₜ = mₜ / (1 - β₁ᵗ)</span>
+<span id="cb1-13"><a href="#cb1-13"></a>    v̂ₜ = vₜ / (1 - β₂ᵗ)</span>
+<span id="cb1-14"><a href="#cb1-14"></a>    Actualizar los parámetros:</span>
+<span id="cb1-15"><a href="#cb1-15"></a>    θₜ = θ_{t-1} - α ⋅ m̂ₜ / (√(v̂ₜ) + ε)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Donde <span class="math inline">\(\epsilon = 0.001\)</span> y <span class="math inline">\(\beta_{1} = 0.9\)</span> ; <span class="math inline">\(\beta_{2} = 0.99\)</span></p>
+</section>
 <section id="experimentos" class="slide level2">
 <h2>Experimentos</h2>
 <div class="cell">
 <div class="cell-output-display">
 
-<div id="ecywytsgrp" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="zmzueqgqzu" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>@import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-#ecywytsgrp table {
+#zmzueqgqzu table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#ecywytsgrp thead, #ecywytsgrp tbody, #ecywytsgrp tfoot, #ecywytsgrp tr, #ecywytsgrp td, #ecywytsgrp th {
+#zmzueqgqzu thead, #zmzueqgqzu tbody, #zmzueqgqzu tfoot, #zmzueqgqzu tr, #zmzueqgqzu td, #zmzueqgqzu th {
   border-style: none;
 }
 
-#ecywytsgrp p {
+#zmzueqgqzu p {
   margin: 0;
   padding: 0;
 }
 
-#ecywytsgrp .gt_table {
+#zmzueqgqzu .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -505,12 +543,12 @@
   border-left-color: #333333;
 }
 
-#ecywytsgrp .gt_caption {
+#zmzueqgqzu .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#ecywytsgrp .gt_title {
+#zmzueqgqzu .gt_title {
   color: #FFFFFF;
   font-size: 125%;
   font-weight: initial;
@@ -522,7 +560,7 @@
   border-bottom-width: 0;
 }
 
-#ecywytsgrp .gt_subtitle {
+#zmzueqgqzu .gt_subtitle {
   color: #FFFFFF;
   font-size: 85%;
   font-weight: initial;
@@ -534,7 +572,7 @@
   border-top-width: 0;
 }
 
-#ecywytsgrp .gt_heading {
+#zmzueqgqzu .gt_heading {
   background-color: #333333;
   text-align: left;
   border-bottom-color: #333333;
@@ -546,13 +584,13 @@
   border-right-color: #D3D3D3;
 }
 
-#ecywytsgrp .gt_bottom_border {
+#zmzueqgqzu .gt_bottom_border {
   border-bottom-style: none;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#ecywytsgrp .gt_col_headings {
+#zmzueqgqzu .gt_col_headings {
   border-top-style: none;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -567,7 +605,7 @@
   border-right-color: #D3D3D3;
 }
 
-#ecywytsgrp .gt_col_heading {
+#zmzueqgqzu .gt_col_heading {
   color: #FFFFFF;
   background-color: #333333;
   font-size: 100%;
@@ -587,7 +625,7 @@
   overflow-x: hidden;
 }
 
-#ecywytsgrp .gt_column_spanner_outer {
+#zmzueqgqzu .gt_column_spanner_outer {
   color: #FFFFFF;
   background-color: #333333;
   font-size: 100%;
@@ -599,15 +637,15 @@
   padding-right: 4px;
 }
 
-#ecywytsgrp .gt_column_spanner_outer:first-child {
+#zmzueqgqzu .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ecywytsgrp .gt_column_spanner_outer:last-child {
+#zmzueqgqzu .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ecywytsgrp .gt_column_spanner {
+#zmzueqgqzu .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 3px;
   border-bottom-color: #FFFFFF;
@@ -619,11 +657,11 @@
   width: 100%;
 }
 
-#ecywytsgrp .gt_spanner_row {
+#zmzueqgqzu .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#ecywytsgrp .gt_group_heading {
+#zmzueqgqzu .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -649,7 +687,7 @@
   text-align: left;
 }
 
-#ecywytsgrp .gt_empty_group_heading {
+#zmzueqgqzu .gt_empty_group_heading {
   padding: 0.5px;
   color: #FFFFFF;
   background-color: #333333;
@@ -664,15 +702,15 @@
   vertical-align: middle;
 }
 
-#ecywytsgrp .gt_from_md > :first-child {
+#zmzueqgqzu .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ecywytsgrp .gt_from_md > :last-child {
+#zmzueqgqzu .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ecywytsgrp .gt_row {
+#zmzueqgqzu .gt_row {
   padding-top: 7px;
   padding-bottom: 7px;
   padding-left: 5px;
@@ -691,7 +729,7 @@
   overflow-x: hidden;
 }
 
-#ecywytsgrp .gt_stub {
+#zmzueqgqzu .gt_stub {
   color: #FFFFFF;
   background-color: #333333;
   font-size: 100%;
@@ -704,7 +742,7 @@
   padding-right: 5px;
 }
 
-#ecywytsgrp .gt_stub_row_group {
+#zmzueqgqzu .gt_stub_row_group {
   color: #FFFFFF;
   background-color: #333333;
   font-size: 100%;
@@ -718,15 +756,15 @@
   vertical-align: top;
 }
 
-#ecywytsgrp .gt_row_group_first td {
+#zmzueqgqzu .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#ecywytsgrp .gt_row_group_first th {
+#zmzueqgqzu .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#ecywytsgrp .gt_summary_row {
+#zmzueqgqzu .gt_summary_row {
   color: #FFFFFF;
   background-color: #333333;
   text-transform: inherit;
@@ -736,16 +774,16 @@
   padding-right: 5px;
 }
 
-#ecywytsgrp .gt_first_summary_row {
+#zmzueqgqzu .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#ecywytsgrp .gt_first_summary_row.thick {
+#zmzueqgqzu .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#ecywytsgrp .gt_last_summary_row {
+#zmzueqgqzu .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -755,7 +793,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#ecywytsgrp .gt_grand_summary_row {
+#zmzueqgqzu .gt_grand_summary_row {
   color: #FFFFFF;
   background-color: #333333;
   text-transform: inherit;
@@ -765,7 +803,7 @@
   padding-right: 5px;
 }
 
-#ecywytsgrp .gt_first_grand_summary_row {
+#zmzueqgqzu .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -775,7 +813,7 @@
   border-top-color: #D3D3D3;
 }
 
-#ecywytsgrp .gt_last_grand_summary_row_top {
+#zmzueqgqzu .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -785,11 +823,11 @@
   border-bottom-color: #D3D3D3;
 }
 
-#ecywytsgrp .gt_striped {
+#zmzueqgqzu .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#ecywytsgrp .gt_table_body {
+#zmzueqgqzu .gt_table_body {
   border-top-style: none;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -798,7 +836,7 @@
   border-bottom-color: #333333;
 }
 
-#ecywytsgrp .gt_footnotes {
+#zmzueqgqzu .gt_footnotes {
   color: #FFFFFF;
   background-color: #333333;
   border-bottom-style: none;
@@ -812,7 +850,7 @@
   border-right-color: #D3D3D3;
 }
 
-#ecywytsgrp .gt_footnote {
+#zmzueqgqzu .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -821,7 +859,7 @@
   padding-right: 5px;
 }
 
-#ecywytsgrp .gt_sourcenotes {
+#zmzueqgqzu .gt_sourcenotes {
   color: #FFFFFF;
   background-color: #333333;
   border-bottom-style: none;
@@ -835,7 +873,7 @@
   border-right-color: #D3D3D3;
 }
 
-#ecywytsgrp .gt_sourcenote {
+#zmzueqgqzu .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -843,63 +881,63 @@
   padding-right: 5px;
 }
 
-#ecywytsgrp .gt_left {
+#zmzueqgqzu .gt_left {
   text-align: left;
 }
 
-#ecywytsgrp .gt_center {
+#zmzueqgqzu .gt_center {
   text-align: center;
 }
 
-#ecywytsgrp .gt_right {
+#zmzueqgqzu .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ecywytsgrp .gt_font_normal {
+#zmzueqgqzu .gt_font_normal {
   font-weight: normal;
 }
 
-#ecywytsgrp .gt_font_bold {
+#zmzueqgqzu .gt_font_bold {
   font-weight: bold;
 }
 
-#ecywytsgrp .gt_font_italic {
+#zmzueqgqzu .gt_font_italic {
   font-style: italic;
 }
 
-#ecywytsgrp .gt_super {
+#zmzueqgqzu .gt_super {
   font-size: 65%;
 }
 
-#ecywytsgrp .gt_footnote_marks {
+#zmzueqgqzu .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#ecywytsgrp .gt_asterisk {
+#zmzueqgqzu .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#ecywytsgrp .gt_indent_1 {
+#zmzueqgqzu .gt_indent_1 {
   text-indent: 5px;
 }
 
-#ecywytsgrp .gt_indent_2 {
+#zmzueqgqzu .gt_indent_2 {
   text-indent: 10px;
 }
 
-#ecywytsgrp .gt_indent_3 {
+#zmzueqgqzu .gt_indent_3 {
   text-indent: 15px;
 }
 
-#ecywytsgrp .gt_indent_4 {
+#zmzueqgqzu .gt_indent_4 {
   text-indent: 20px;
 }
 
-#ecywytsgrp .gt_indent_5 {
+#zmzueqgqzu .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
@@ -966,26 +1004,26 @@
 <div class="cell">
 <div class="cell-output-display">
 
-<div id="kvmlqzamqb" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="jxylusvzop" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>@import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-#kvmlqzamqb table {
+#jxylusvzop table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#kvmlqzamqb thead, #kvmlqzamqb tbody, #kvmlqzamqb tfoot, #kvmlqzamqb tr, #kvmlqzamqb td, #kvmlqzamqb th {
+#jxylusvzop thead, #jxylusvzop tbody, #jxylusvzop tfoot, #jxylusvzop tr, #jxylusvzop td, #jxylusvzop th {
   border-style: none;
 }
 
-#kvmlqzamqb p {
+#jxylusvzop p {
   margin: 0;
   padding: 0;
 }
 
-#kvmlqzamqb .gt_table {
+#jxylusvzop .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1011,12 +1049,12 @@
   border-left-color: #333333;
 }
 
-#kvmlqzamqb .gt_caption {
+#jxylusvzop .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#kvmlqzamqb .gt_title {
+#jxylusvzop .gt_title {
   color: #FFFFFF;
   font-size: 125%;
   font-weight: initial;
@@ -1028,7 +1066,7 @@
   border-bottom-width: 0;
 }
 
-#kvmlqzamqb .gt_subtitle {
+#jxylusvzop .gt_subtitle {
   color: #FFFFFF;
   font-size: 85%;
   font-weight: initial;
@@ -1040,7 +1078,7 @@
   border-top-width: 0;
 }
 
-#kvmlqzamqb .gt_heading {
+#jxylusvzop .gt_heading {
   background-color: #333333;
   text-align: left;
   border-bottom-color: #333333;
@@ -1052,13 +1090,13 @@
   border-right-color: #D3D3D3;
 }
 
-#kvmlqzamqb .gt_bottom_border {
+#jxylusvzop .gt_bottom_border {
   border-bottom-style: none;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#kvmlqzamqb .gt_col_headings {
+#jxylusvzop .gt_col_headings {
   border-top-style: none;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1073,7 +1111,7 @@
   border-right-color: #D3D3D3;
 }
 
-#kvmlqzamqb .gt_col_heading {
+#jxylusvzop .gt_col_heading {
   color: #FFFFFF;
   background-color: #333333;
   font-size: 100%;
@@ -1093,7 +1131,7 @@
   overflow-x: hidden;
 }
 
-#kvmlqzamqb .gt_column_spanner_outer {
+#jxylusvzop .gt_column_spanner_outer {
   color: #FFFFFF;
   background-color: #333333;
   font-size: 100%;
@@ -1105,15 +1143,15 @@
   padding-right: 4px;
 }
 
-#kvmlqzamqb .gt_column_spanner_outer:first-child {
+#jxylusvzop .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#kvmlqzamqb .gt_column_spanner_outer:last-child {
+#jxylusvzop .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#kvmlqzamqb .gt_column_spanner {
+#jxylusvzop .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 3px;
   border-bottom-color: #FFFFFF;
@@ -1125,11 +1163,11 @@
   width: 100%;
 }
 
-#kvmlqzamqb .gt_spanner_row {
+#jxylusvzop .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#kvmlqzamqb .gt_group_heading {
+#jxylusvzop .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1155,7 +1193,7 @@
   text-align: left;
 }
 
-#kvmlqzamqb .gt_empty_group_heading {
+#jxylusvzop .gt_empty_group_heading {
   padding: 0.5px;
   color: #FFFFFF;
   background-color: #333333;
@@ -1170,15 +1208,15 @@
   vertical-align: middle;
 }
 
-#kvmlqzamqb .gt_from_md > :first-child {
+#jxylusvzop .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#kvmlqzamqb .gt_from_md > :last-child {
+#jxylusvzop .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#kvmlqzamqb .gt_row {
+#jxylusvzop .gt_row {
   padding-top: 7px;
   padding-bottom: 7px;
   padding-left: 5px;
@@ -1197,7 +1235,7 @@
   overflow-x: hidden;
 }
 
-#kvmlqzamqb .gt_stub {
+#jxylusvzop .gt_stub {
   color: #FFFFFF;
   background-color: #333333;
   font-size: 100%;
@@ -1210,7 +1248,7 @@
   padding-right: 5px;
 }
 
-#kvmlqzamqb .gt_stub_row_group {
+#jxylusvzop .gt_stub_row_group {
   color: #FFFFFF;
   background-color: #333333;
   font-size: 100%;
@@ -1224,15 +1262,15 @@
   vertical-align: top;
 }
 
-#kvmlqzamqb .gt_row_group_first td {
+#jxylusvzop .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#kvmlqzamqb .gt_row_group_first th {
+#jxylusvzop .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#kvmlqzamqb .gt_summary_row {
+#jxylusvzop .gt_summary_row {
   color: #FFFFFF;
   background-color: #333333;
   text-transform: inherit;
@@ -1242,16 +1280,16 @@
   padding-right: 5px;
 }
 
-#kvmlqzamqb .gt_first_summary_row {
+#jxylusvzop .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#kvmlqzamqb .gt_first_summary_row.thick {
+#jxylusvzop .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#kvmlqzamqb .gt_last_summary_row {
+#jxylusvzop .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1261,7 +1299,7 @@
   border-bottom-color: #D3D3D3;
 }
 
-#kvmlqzamqb .gt_grand_summary_row {
+#jxylusvzop .gt_grand_summary_row {
   color: #FFFFFF;
   background-color: #333333;
   text-transform: inherit;
@@ -1271,7 +1309,7 @@
   padding-right: 5px;
 }
 
-#kvmlqzamqb .gt_first_grand_summary_row {
+#jxylusvzop .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1281,7 +1319,7 @@
   border-top-color: #D3D3D3;
 }
 
-#kvmlqzamqb .gt_last_grand_summary_row_top {
+#jxylusvzop .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1291,11 +1329,11 @@
   border-bottom-color: #D3D3D3;
 }
 
-#kvmlqzamqb .gt_striped {
+#jxylusvzop .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#kvmlqzamqb .gt_table_body {
+#jxylusvzop .gt_table_body {
   border-top-style: none;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1304,7 +1342,7 @@
   border-bottom-color: #333333;
 }
 
-#kvmlqzamqb .gt_footnotes {
+#jxylusvzop .gt_footnotes {
   color: #FFFFFF;
   background-color: #333333;
   border-bottom-style: none;
@@ -1318,7 +1356,7 @@
   border-right-color: #D3D3D3;
 }
 
-#kvmlqzamqb .gt_footnote {
+#jxylusvzop .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1327,7 +1365,7 @@
   padding-right: 5px;
 }
 
-#kvmlqzamqb .gt_sourcenotes {
+#jxylusvzop .gt_sourcenotes {
   color: #FFFFFF;
   background-color: #333333;
   border-bottom-style: none;
@@ -1341,7 +1379,7 @@
   border-right-color: #D3D3D3;
 }
 
-#kvmlqzamqb .gt_sourcenote {
+#jxylusvzop .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1349,73 +1387,73 @@
   padding-right: 5px;
 }
 
-#kvmlqzamqb .gt_left {
+#jxylusvzop .gt_left {
   text-align: left;
 }
 
-#kvmlqzamqb .gt_center {
+#jxylusvzop .gt_center {
   text-align: center;
 }
 
-#kvmlqzamqb .gt_right {
+#jxylusvzop .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#kvmlqzamqb .gt_font_normal {
+#jxylusvzop .gt_font_normal {
   font-weight: normal;
 }
 
-#kvmlqzamqb .gt_font_bold {
+#jxylusvzop .gt_font_bold {
   font-weight: bold;
 }
 
-#kvmlqzamqb .gt_font_italic {
+#jxylusvzop .gt_font_italic {
   font-style: italic;
 }
 
-#kvmlqzamqb .gt_super {
+#jxylusvzop .gt_super {
   font-size: 65%;
 }
 
-#kvmlqzamqb .gt_footnote_marks {
+#jxylusvzop .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#kvmlqzamqb .gt_asterisk {
+#jxylusvzop .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#kvmlqzamqb .gt_indent_1 {
+#jxylusvzop .gt_indent_1 {
   text-indent: 5px;
 }
 
-#kvmlqzamqb .gt_indent_2 {
+#jxylusvzop .gt_indent_2 {
   text-indent: 10px;
 }
 
-#kvmlqzamqb .gt_indent_3 {
+#jxylusvzop .gt_indent_3 {
   text-indent: 15px;
 }
 
-#kvmlqzamqb .gt_indent_4 {
+#jxylusvzop .gt_indent_4 {
   text-indent: 20px;
 }
 
-#kvmlqzamqb .gt_indent_5 {
+#jxylusvzop .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
 <table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
   <thead>
     <tr class="gt_heading">
-      <td colspan="5" class="gt_heading gt_title gt_font_normal" style="font-family: 'Libre Franklin'; font-weight: 800;">Tabla de Precisión</td>
+      <td colspan="5" class="gt_heading gt_title gt_font_normal" style="font-family: 'Libre Franklin'; font-weight: 800;">Precisión</td>
     </tr>
     <tr class="gt_heading">
-      <td colspan="5" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style="">Precisión de Entrenamiento (SB) y Pruebas (LB)</td>
+      <td colspan="5" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style="">Precisión de Entrenamiento (SB) y Test (LB)</td>
     </tr>
     <tr class="gt_col_headings">
       <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="color: #FFFFFF; font-family: 'Source Sans Pro'; text-transform: uppercase;" scope="col" id="Name">Name</th>
@@ -1486,20 +1524,20 @@
 <section id="representación-paramétrica-en-una-dimensión-cont.-3" class="slide level2">
 <h2>Representación paramétrica en una dimensión (cont.)</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a>alpha_range <span class="op">=</span> numpy.linspace(<span class="op">-</span><span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">25</span>)</span>
-<span id="cb1-2"><a href="#cb1-2"></a>data_for_plotting <span class="op">=</span> numpy.zeros((<span class="dv">25</span>, <span class="dv">4</span>))</span>
-<span id="cb1-3"><a href="#cb1-3"></a></span>
-<span id="cb1-4"><a href="#cb1-4"></a>i <span class="op">=</span> <span class="dv">0</span></span>
-<span id="cb1-5"><a href="#cb1-5"></a><span class="cf">for</span> alpha <span class="kw">in</span> alpha_range:</span>
-<span id="cb1-6"><a href="#cb1-6"></a>    <span class="cf">for</span> p <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(sb_solution)):</span>
-<span id="cb1-7"><a href="#cb1-7"></a>        model.trainable_weights[p].set_value(lb_solution[p]<span class="op">*</span>alpha <span class="op">+</span></span>
-<span id="cb1-8"><a href="#cb1-8"></a>                                             sb_solution[p]<span class="op">*</span>(<span class="dv">1</span><span class="op">-</span>alpha))</span>
-<span id="cb1-9"><a href="#cb1-9"></a>    train_xent, train_acc <span class="op">=</span> model.evaluate(X_train, Y_train,</span>
-<span id="cb1-10"><a href="#cb1-10"></a>                                           batch_size<span class="op">=</span><span class="dv">5000</span>, verbose<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb1-11"><a href="#cb1-11"></a>    test_xent, test_acc <span class="op">=</span> model.evaluate(X_test, Y_test,</span>
-<span id="cb1-12"><a href="#cb1-12"></a>                                         batch_size<span class="op">=</span><span class="dv">5000</span>, verbose<span class="op">=</span><span class="dv">0</span>)</span>
-<span id="cb1-13"><a href="#cb1-13"></a>    data_for_plotting[i, :] <span class="op">=</span> [train_xent, train_acc, test_xent, test_acc]</span>
-<span id="cb1-14"><a href="#cb1-14"></a>    i <span class="op">+=</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a>alpha_range <span class="op">=</span> numpy.linspace(<span class="op">-</span><span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">25</span>)</span>
+<span id="cb2-2"><a href="#cb2-2"></a>data_for_plotting <span class="op">=</span> numpy.zeros((<span class="dv">25</span>, <span class="dv">4</span>))</span>
+<span id="cb2-3"><a href="#cb2-3"></a></span>
+<span id="cb2-4"><a href="#cb2-4"></a>i <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="cf">for</span> alpha <span class="kw">in</span> alpha_range:</span>
+<span id="cb2-6"><a href="#cb2-6"></a>    <span class="cf">for</span> p <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(sb_solution)):</span>
+<span id="cb2-7"><a href="#cb2-7"></a>        model.trainable_weights[p].set_value(lb_solution[p]<span class="op">*</span>alpha <span class="op">+</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a>                                             sb_solution[p]<span class="op">*</span>(<span class="dv">1</span><span class="op">-</span>alpha))</span>
+<span id="cb2-9"><a href="#cb2-9"></a>    train_xent, train_acc <span class="op">=</span> model.evaluate(X_train, Y_train,</span>
+<span id="cb2-10"><a href="#cb2-10"></a>                                           batch_size<span class="op">=</span><span class="dv">5000</span>, verbose<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb2-11"><a href="#cb2-11"></a>    test_xent, test_acc <span class="op">=</span> model.evaluate(X_test, Y_test,</span>
+<span id="cb2-12"><a href="#cb2-12"></a>                                         batch_size<span class="op">=</span><span class="dv">5000</span>, verbose<span class="op">=</span><span class="dv">0</span>)</span>
+<span id="cb2-13"><a href="#cb2-13"></a>    data_for_plotting[i, :] <span class="op">=</span> [train_xent, train_acc, test_xent, test_acc]</span>
+<span id="cb2-14"><a href="#cb2-14"></a>    i <span class="op">+=</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><a href="https://github.com/keskarnitish/large-batch-training/blob/master/plot_parametric_plot.py">Código obtenido de Github de los mismos autores</a></p>
 </section>
@@ -1524,7 +1562,7 @@
 <section id="sharpness-de-los-mínimos-cont.-2" class="slide level2">
 <h2>Sharpness de los mínimos (cont.)</h2>
 <p align="center">
-<img src="https://raw.githubusercontent.com/mauroloprete/SharpMinima-LargeBatchTraining/main/img/sharpness.png" alt="Descripción de la imagen" style="width: 80%; height: 10%;">
+<img src="https://raw.githubusercontent.com/mauroloprete/SharpMinima-LargeBatchTraining/main/img/sharpness.png" alt="Descripción de la imagen" class="imagen-escalada">
 </p>
 </section>
 <section id="sb-lb" class="slide level2">
@@ -1532,8 +1570,8 @@
 <ul>
 <li><strong>Comportamiento de SB (Small Batch) con gradientes ruidosos:</strong>
 <ul>
-<li>Los gradientes ruidosos en métodos SB afectan el movimiento de las iteraciones.</li>
-<li>El ruido en el gradiente aleja las iteraciones de los minimizadores afilados.</li>
+<li>Los gradientes ruidosos en métodos SB afectan el movimiento de las iteraciones. . . .</li>
+<li>El ruido en el gradiente aleja las iteraciones de los minimizadores afilados. . . .</li>
 <li>Promueve el movimiento hacia minimizadores más planos para evitar la influencia del ruido.</li>
 </ul></li>
 </ul>
@@ -1545,7 +1583,7 @@
 <ul>
 <li>Cuando el tamaño del lote excede un umbral específico:
 <ul>
-<li>El ruido en el gradiente estocástico no es suficiente para salir de la cuenca inicial.</li>
+<li>El ruido en el gradiente estocástico no es suficiente para salir de la cuenca inicial. . . .</li>
 <li>Conduce a la convergencia hacia un tipo de minimizador más afilado.</li>
 </ul></li>
 </ul></li>
@@ -1561,20 +1599,34 @@
 <section id="preguntas-abiertas" class="slide level2">
 <h2>Preguntas abiertas</h2>
 <ul>
-<li>¿Los métodos de gran lote siempre convergen hacia minimizadores afilados en el aprendizaje profundo?</li>
+<li>¿Los métodos de gran lote siempre convergen hacia minimizadores afilados en el aprendizaje profundo? . . .</li>
 <li>¿Se pueden diseñar redes que funcionen mejor con métodos de gran lote?</li>
-<li>¿Hay una manera de comenzar las redes para que los métodos de gran lote funcionen mejor?</li>
+<li>¿Hay una manera de comenzar las redes para que los métodos de gran lote funcionen mejor? . . .</li>
 <li>¿Podemos encontrar formas de evitar que los métodos de gran lote se enfoquen en minimizadores afilados?</li>
 </ul>
 </section>
 <section id="conclusiones" class="slide level2">
 <h2>Conclusiones</h2>
 <ul>
-<li>La convergencia hacia minimizadores afilados afecta la capacidad de generalización en métodos de gran lote para el aprendizaje profundo.</li>
-<li>Estrategias previas como la ampliación de datos y el entrenamiento conservador no resuelven completamente el problema de generalización deficiente en métodos de gran lote.</li>
-<li>El muestreo dinámico muestra cierta promesa para mejorar los resultados de estos métodos.</li>
+<li>La convergencia hacia minimizadores afilados afecta la capacidad de generalización en métodos de gran lote para el aprendizaje profundo. . . .</li>
+<li>Estrategias previas como la ampliación de datos y el entrenamiento conservador no resuelven completamente el problema de generalización deficiente en métodos de gran lote. . . .</li>
+<li>El muestreo dinámico muestra cierta promesa para mejorar los resultados de estos métodos. . . .</li>
 <li>La similitud en los valores de pérdida entre minimizadores afilados y planos es consistente con estudios previos.</li>
 </ul>
+</section>
+<section id="referencias" class="slide level2 smaller scrollable">
+<h2>Referencias</h2>
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-GoodBengCour16" class="csl-entry" role="listitem">
+Goodfellow, Ian J., Yoshua Bengio, and Aaron Courville. 2016. <em>Deep Learning</em>. Cambridge, MA, USA: MIT Press.
+</div>
+<div id="ref-goodfellow_qualitatively_2015" class="csl-entry" role="listitem">
+Goodfellow, Ian J., Oriol Vinyals, and Andrew M. Saxe. 2015. <span>“Qualitatively Characterizing Neural Network Optimization Problems.”</span> arXiv. <a href="https://doi.org/10.48550/arXiv.1412.6544">https://doi.org/10.48550/arXiv.1412.6544</a>.
+</div>
+<div id="ref-Keskar2016" class="csl-entry" role="listitem">
+Nitish Shirish Keskar, Jorge Nocedal, Dheevatsa Mudigere, and Ping Tak Peter Tang. 2016. <span>“On Large-Batch Training for Deep Learning: Generalization Gap and Sharp Minima.”</span> <em>arXiv Preprint arXiv:1609.04836</em>.
+</div>
+</div>
 <div class="footer footer-default">
 
 </div>
